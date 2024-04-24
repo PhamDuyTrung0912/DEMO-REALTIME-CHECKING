@@ -13,7 +13,6 @@ const io = socketIO(server, {
     origin: true,
     credentials: true,
   },
-  transports: ['websocket']
 });
 
 const PORT = 3000;
