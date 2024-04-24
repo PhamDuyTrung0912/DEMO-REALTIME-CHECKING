@@ -43,7 +43,7 @@ io.on("connection", (ws) => {
 
   ws.emit("DEVICES_INFO", devices);
 
-  setInterval(updateCoordinates, 2000);
+  setInterval(updateCoordinates, 20000);
 });
 
 server.listen(PORT, () => {
