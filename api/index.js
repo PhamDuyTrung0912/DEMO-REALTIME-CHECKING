@@ -13,6 +13,7 @@ const io = socketIO(server, {
     origin: true,
     credentials: true,
   },
+  transports: ['websocket']
 });
 
 const PORT = 3000;
@@ -32,7 +33,6 @@ function updateCoordinates() {
     latitude: Math.random() * 180 - 90,
     longitude: Math.random() * 360 - 180,
   }));
-  console.log("vao day");
   io.emit("DEVICES_INFO", devices);
 }
 
