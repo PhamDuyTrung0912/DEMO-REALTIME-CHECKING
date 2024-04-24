@@ -20,34 +20,29 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-let devices = Array.from({ length: 500 }, (_, index) => ({
+let devices = Array.from({ length: 100 }, (_, index) => ({
   id: index + 1,
   latitude: Math.random() * 180 - 90,
   longitude: Math.random() * 360 - 180,
 }));
 
 function updateCoordinates() {
-    const devices = Array.from({ length: 500 }, (_, index) => ({
-      id: index + 1,
-      latitude: Math.random() * 180 - 90,
-      longitude: Math.random() * 360 - 180,
-    }));
-
-    io.emit("DEVICES_INFO", devices);
+  const devices = Array.from({ length: 100 }, (_, index) => ({
+    id: index + 1,
+    latitude: Math.random() * 180 - 90,
+    longitude: Math.random() * 360 - 180,
+  }));
+  console.log("vao day");
+  io.emit("DEVICES_INFO", devices);
 }
 
+const intervalId = setInterval(updateCoordinates, 10000);
 
 // WebSocket connection handler
 io.on("connection", (ws) => {
   console.log(`Listener socket`, ws.id);
-
-  ws.emit("DEVICES_INFO", devices);
-
-  setInterval(updateCoordinates, 20000);
 });
 
 server.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
-
-
