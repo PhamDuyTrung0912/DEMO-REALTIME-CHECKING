@@ -20,26 +20,36 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-let devices = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  latitude: Math.random() * 180 - 90,
-  longitude: Math.random() * 360 - 180,
-}));
+let coordinateUpdateInterval;
+let isUpdatingCoordinates = false;
 
 function updateCoordinates() {
   const devices = Array.from({ length: 100 }, (_, index) => ({
     id: index + 1,
     latitude: Math.random() * 180 - 90,
     longitude: Math.random() * 360 - 180,
+    direction: Math.random() * 2 * Math.PI,
   }));
   io.emit("DEVICES_INFO", devices);
 }
 
-const intervalId = setInterval(updateCoordinates, 10000);
-
 // WebSocket connection handler
 io.on("connection", (ws) => {
   console.log(`Listener socket`, ws.id);
+
+  if (!isUpdatingCoordinates) {
+    console.log('trigger')
+    coordinateUpdateInterval = setInterval(updateCoordinates, 5000);
+    isUpdatingCoordinates = true;
+  }
+
+  ws.on("disconnect", () => {
+    console.log(`Listener socket disconnected`, ws.id);
+    if (io.sockets.sockets.size === 0) {
+      clearInterval(coordinateUpdateInterval);
+      isUpdatingCoordinates = false;
+    }
+  });
 });
 
 server.listen(PORT, () => {
