@@ -39,7 +39,7 @@ io.on("connection", (ws) => {
 
   if (!isUpdatingCoordinates) {
     console.log('trigger')
-    coordinateUpdateInterval = setInterval(updateCoordinates, 5000);
+    coordinateUpdateInterval = setInterval(updateCoordinates, 2000);
     isUpdatingCoordinates = true;
   }
 
